@@ -109,8 +109,18 @@ const Native = (() => {
     webApp.BackButton.hide();
   }
 
-  // Открывает чат с ботом. Вне Telegram — просто открывает t.me в новой вкладке,
-  // чтобы ссылку можно было проверить и в обычном браузере.
+  // Закрывает Mini App. Так как этот Mini App всегда открывается из кнопки меню
+  // ВНУТРИ чата с ботом, закрытие само по себе возвращает пользователя в этот чат —
+  // это и есть правильный способ «вернуться к боту», а не openTelegramLink (см. ниже).
+  function closeApp() {
+    if (isInsideTelegram) webApp.close();
+  }
+
+  // Открывает чат по юзернейму. ВАЖНО: не работает для ссылки на ТОТ ЖЕ чат,
+  // откуда открыт этот Mini App (Telegram молча игнорирует такую ссылку) — для
+  // этого случая в app.js есть openBotChatOrClose(), который вызывает closeApp().
+  // Вне Telegram — просто открывает t.me в новой вкладке, чтобы ссылку можно
+  // было проверить и в обычном браузере.
   function openTelegramLink(username) {
     const url = `https://t.me/${username}`;
     if (isInsideTelegram) {
@@ -156,6 +166,7 @@ const Native = (() => {
     hideMainButton,
     useBackButton,
     hideBackButton,
+    closeApp,
     openTelegramLink,
     enableClosingConfirmation,
     disableClosingConfirmation,

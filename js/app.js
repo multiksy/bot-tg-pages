@@ -178,14 +178,30 @@ function handleWantNewClip() {
 
 // ---------- [2] Загрузка видео ----------
 
+// Mini App всегда открыт из кнопки меню ВНУТРИ чата с ботом (BotFather → Menu Button,
+// см. CLAUDE.md). Открыть ссылку САМ НА СЕБЯ Telegram не даёт (openTelegramLink молча
+// ничего не делает) — правильный способ «вернуться к боту» в этом случае — закрыть
+// Mini App, тогда под ним снова окажется тот же чат. Если username — другой чат
+// (например отдельная поддержка, не тот же бот), открываем его как обычно.
+function openBotChatOrClose(username) {
+  if (Native.isInsideTelegram && username === CONFIG.BOT_USERNAME) {
+    Native.closeApp();
+  } else {
+    Native.openTelegramLink(username);
+  }
+}
+
 function handleUploadCta() {
   Native.haptic('light');
+  if (Native.isInsideTelegram) {
+    // Внутри Telegram эта функция обычно закрывает Mini App (см. openBotChatOrClose) —
+    // дальше пользователь уже в чате с ботом и присылает видео сам.
+    openBotChatOrClose(CONFIG.BOT_USERNAME);
+    return;
+  }
+  // Вне Telegram (браузер, разработка) — открыть чат некуда закрываться, просто откроем
+  // ссылку в новой вкладке и вернёмся на Главную для продолжения тестирования интерфейса.
   Native.openTelegramLink(CONFIG.BOT_USERNAME);
-  // Дальше пользователь реально отправляет видео боту в чате — бот его реально обрабатывает
-  // (см. bot/). Экран «Обработка» здесь НЕ показываем: у нас пока нет моста, чтобы узнать
-  // реальный статус этой задачи внутри Mini App (бот присылает результат отдельным
-  // сообщением в чат, не сюда). Показывать фейковый прогресс — значит врать, что видео
-  // уже готово, поэтому просто возвращаемся на Главную.
   showToast('Открыт чат с ботом — пришли туда видео');
   showScreen('home', 'back');
 }
@@ -532,7 +548,7 @@ function wireEvents() {
     if (!shared) showToast('Демо: ссылка-приглашение скопирована бы сюда');
   });
   document.getElementById('profile-support').addEventListener('click', () => {
-    Native.openTelegramLink(CONFIG.SUPPORT_USERNAME);
+    openBotChatOrClose(CONFIG.SUPPORT_USERNAME);
   });
 }
 
