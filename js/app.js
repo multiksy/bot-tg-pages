@@ -1,13 +1,15 @@
 // =========================================================
 // app.js — маршрутизация между экранами и вся интерактивная логика.
 //
-// Backend в этой версии не подключён (см. tg-app/CLAUDE.md):
-// загрузка видео, обработка и оплата полностью замоканы —
-// прогресс идёт по таймеру, а не по реальному статусу задачи,
-// оплата не списывает настоящие деньги. Структура функций
-// (startProcessing/handlePay/…) написана так, чтобы позже
-// подменить моки на реальные fetch-запросы без переписывания
-// экранов.
+// Реальный бэкенд (bot/, Python+aiogram) уже существует и реально обрабатывает
+// видео — но мост «бэкенд → это Mini App» ещё не построен (бот пока не умеет
+// открывать Mini App заново на экране результата с id настоящей задачи).
+// Поэтому здесь ВАЖНОЕ ПРАВИЛО: ничего в интерфейсе не должно СИМУЛИРОВАТЬ
+// завершённую генерацию и не должно списывать клип из лимита — до тех пор,
+// пока это не подтверждено реальным бэкендом. Экраны «Обработка»/«Результат»
+// (startProcessing/onProcessingComplete/showResult) — это готовая вёрстка
+// для будущего реального моста, просто пока её никто не вызывает из UI.
+// Оплата (handlePay) остаётся мок — она про Telegram Stars, ещё не сделана.
 // =========================================================
 
 const CIRCUMFERENCE = 327; // длина окружности прогресс-кольца, совпадает со style.css
@@ -51,6 +53,11 @@ function showToast(message, duration = 2200) {
 
 // ---------- Состояние пользователя (localStorage — только для демо-персистентности) ----------
 
+// Версия схемы состояния. Бампнуть при изменениях, которые делают старые сохранённые
+// данные некорректными (как сейчас: убрали фейковое списание клипов из UI — у тех,
+// кто уже натестировал счётчик до нуля через старую версию, состояние сбросится один раз).
+const STATE_SCHEMA_VERSION = 2;
+
 function loadState() {
   let saved = null;
   try {
@@ -60,14 +67,16 @@ function loadState() {
     saved = null; // приватный режим/заблокированное хранилище — просто начинаем с чистого состояния
   }
 
-  if (saved) {
+  if (saved && saved.schemaVersion === STATE_SCHEMA_VERSION) {
     state.user = saved;
     return;
   }
 
-  // Свежий старт: копируем дефолт из data.js и подставляем настоящую сегодняшнюю дату клипу-примеру.
+  // Свежий старт (или сброс из-за смены схемы, см. STATE_SCHEMA_VERSION выше):
+  // копируем дефолт из data.js и подставляем настоящую сегодняшнюю дату клипу-примеру.
   state.user = JSON.parse(JSON.stringify(DEFAULT_USER_STATE));
   state.user.history = state.user.history.map((item) => ({ ...item, date: formatShortDate(new Date()) }));
+  state.user.schemaVersion = STATE_SCHEMA_VERSION;
   persistState();
 }
 
@@ -172,12 +181,13 @@ function handleWantNewClip() {
 function handleUploadCta() {
   Native.haptic('light');
   Native.openTelegramLink(CONFIG.BOT_USERNAME);
-  // В реальном сценарии дальше пользователь отправляет видео в чат, а Mini App открывается заново
-  // по кнопке из сообщения бота (см. research.md, оценка Telegram-разработчика — статус приходит
-  // из чата, не пушем внутри веб-приложения). Здесь это спрямлено для кликабельного прототипа:
-  // сразу переходим к экрану обработки.
-  showToast('Открыт чат с ботом (демо) — видео «отправлено»');
-  setTimeout(() => startProcessing(), 500);
+  // Дальше пользователь реально отправляет видео боту в чате — бот его реально обрабатывает
+  // (см. bot/). Экран «Обработка» здесь НЕ показываем: у нас пока нет моста, чтобы узнать
+  // реальный статус этой задачи внутри Mini App (бот присылает результат отдельным
+  // сообщением в чат, не сюда). Показывать фейковый прогресс — значит врать, что видео
+  // уже готово, поэтому просто возвращаемся на Главную.
+  showToast('Открыт чат с ботом — пришли туда видео');
+  showScreen('home', 'back');
 }
 
 // ---------- [3] Обработка ----------
@@ -284,28 +294,17 @@ function viewedEntry() {
 }
 
 function handleResultStyle() {
-  openSheet('Стиль субтитров', SUBTITLE_STYLES, (choice) => {
-    if (limitReached()) {
-      state.pricingReturnScreen = 'result';
-      renderPricing();
-      showScreen('pricing', 'forward');
-      return;
-    }
-    const source = viewedEntry();
-    startProcessing({ subtitleStyle: choice, sourceMinutes: source.sourceMinutes });
+  // Выбор стиля субтитров бэкенд пока не поддерживает (MVP — только авто-субтитры +
+  // кадрирование, см. brief.md). Показываем интерфейс выбора как задел на будущее,
+  // но НЕ запускаем фейковую пересборку и не трогаем лимит.
+  openSheet('Стиль субтитров', SUBTITLE_STYLES, () => {
+    showToast('Выбор стиля пока не подключён к боту — скоро будет');
   });
 }
 
 function handleResultMusic() {
-  openSheet('Музыка', MUSIC_STYLES, (choice) => {
-    if (limitReached()) {
-      state.pricingReturnScreen = 'result';
-      renderPricing();
-      showScreen('pricing', 'forward');
-      return;
-    }
-    const source = viewedEntry();
-    startProcessing({ musicStyle: choice, sourceMinutes: source.sourceMinutes });
+  openSheet('Музыка', MUSIC_STYLES, () => {
+    showToast('Добавление музыки пока не подключено к боту — скоро будет');
   });
 }
 
