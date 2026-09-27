@@ -118,10 +118,26 @@ function showScreen(name, transition = 'forward') {
   state.currentScreen = name;
   updateTabBar(name);
   updateNativeButtons(name);
+  playEntrance(target);
 
   // Предупреждение о закрытии приложения нужно только во время активной обработки видео.
   if (name === 'processing') Native.enableClosingConfirmation();
   else Native.disableClosingConfirmation();
+}
+
+// Каскадная анимация появления контента экрана (см. .enter-anim в style.css).
+// Вызывается при каждом показе экрана — снимаем класс и через reflow ставим
+// заново, иначе CSS-анимация не перезапустится на уже показывавшихся элементах.
+function playEntrance(screenEl) {
+  const items = screenEl.querySelectorAll(
+    '.screen__content > *, .tile, .pricing-card, .history-item, .main-button'
+  );
+  items.forEach((el, i) => {
+    el.classList.remove('enter-anim');
+    void el.offsetWidth; // форсируем reflow — без этого браузер схлопнёт remove+add в одну операцию
+    el.style.setProperty('--i', Math.min(i, 10));
+    el.classList.add('enter-anim');
+  });
 }
 
 function updateTabBar(name) {
