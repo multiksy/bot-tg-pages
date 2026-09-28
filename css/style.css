@@ -796,13 +796,11 @@ img { max-width: 100%; display: block; }
   position: absolute;
   width: 40px;
   height: 40px;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
+  object-fit: contain; /* картинки не квадратные (напр. eye 640×520) — вписываем без искажений */
   pointer-events: none;
-  /* Два drop-shadow: тёмный «заземляет» иконку, розовое свечение — чтобы тонкие
-     ажурные силуэты (кольца, искра) не терялись на тёмно-синем фоне. */
-  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.45)) drop-shadow(0 0 9px rgba(255, 190, 215, 0.45));
+  /* Раньше здесь был filter: drop-shadow(...) для свечения — убрано: в вебвью
+     Telegram Desktop он не читает прозрачность WebP правильно и рисует тень
+     сплошным квадратом по границам картинки вместо силуэта иконки. */
   z-index: 1;
   animation: deco-float var(--dur, 6.5s) ease-in-out var(--delay, 0s) infinite alternate;
 }
@@ -839,15 +837,9 @@ img { max-width: 100%; display: block; }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-.deco-icon--heart   { background-image: url('../img/heart.webp'); }
-.deco-icon--sparkle { background-image: url('../img/sparkle.webp'); }
-.deco-icon--drop    { background-image: url('../img/drop.webp'); }
-.deco-icon--moon    { background-image: url('../img/moon.webp'); }
-.deco-icon--rings   { background-image: url('../img/rings.webp'); }
-.deco-icon--star    { background-image: url('../img/star.webp'); }
-.deco-icon--blob    { background-image: url('../img/blob.webp'); }
-.deco-icon--flower  { background-image: url('../img/flower.webp'); }
-.deco-icon--cherry  { background-image: url('../img/cherry.webp'); }
+/* Картинка задаётся напрямую атрибутом src в HTML (<img src="img/heart.webp">),
+   а не через CSS background — .deco-icon--heart и т.д. остаются просто именующими
+   классами для читаемости разметки, стилей на них больше нет. */
 
 /* Позиции, размер и параметры анимации — по одной на каждое место
    использования, подбирались на глаз под конкретный экран.
@@ -941,4 +933,121 @@ img { max-width: 100%; display: block; }
   width: 26px;
   height: 26px;
   --dur: 14s;
+}
+
+/* Вторая волна иконок — сгущаем декор по просьбе (было мало). Те же правила
+   безопасного позиционирования: элементы внутри relative-обёрток (.home-header,
+   .demo-card, .icon-circle-wrap) могут уходить в минус, всё остальное — только
+   top/bottom ≥ 0 относительно .screen__content (иначе обрежет скролл). */
+.deco-pos--home-title-2 {
+  bottom: -6px;
+  left: 4px;
+  width: 24px;
+  height: 24px;
+  --r0: 6deg;
+  --r1: -6deg;
+  --dur: 8s;
+  --delay: 1.2s;
+}
+.deco-pos--home-demo-2 {
+  top: -10px;
+  right: -8px;
+  width: 30px;
+  height: 30px;
+  --r0: 10deg;
+  --r1: -4deg;
+  --dur: 7.8s;
+  --delay: 0.3s;
+  z-index: 2;
+}
+.deco-pos--upload-2 {
+  bottom: -8px;
+  right: -10px;
+  width: 26px;
+  height: 26px;
+  --dur: 12s;
+}
+.deco-pos--upload-3 {
+  top: 6px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  --r0: -8deg;
+  --r1: 8deg;
+  --dur: 6.4s;
+}
+.deco-pos--processing {
+  top: 8px;
+  right: 10px;
+  width: 26px;
+  height: 26px;
+  --dur: 15s;
+}
+.deco-pos--result-3 {
+  bottom: 92px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  --r0: -10deg;
+  --r1: 6deg;
+  --dur: 7.2s;
+  --delay: 0.5s;
+}
+.deco-pos--result-4 {
+  top: 4px;
+  left: 8px;
+  width: 30px;
+  height: 30px;
+  --r0: 6deg;
+  --r1: -8deg;
+  --dur: 8.4s;
+}
+.deco-pos--history-2 {
+  top: 4px;
+  left: 8px;
+  width: 26px;
+  height: 26px;
+  --dur: 9s;
+}
+.deco-pos--history-3 {
+  bottom: 60px;
+  right: 20px;
+  width: 30px;
+  height: 30px;
+  --r0: -6deg;
+  --r1: 8deg;
+  --dur: 7.6s;
+  --delay: 0.8s;
+}
+.deco-pos--pricing-3 {
+  top: 2px;
+  left: 4px;
+  width: 28px;
+  height: 28px;
+  --r0: 8deg;
+  --r1: -6deg;
+  --dur: 8.2s;
+}
+.deco-pos--pricing-4 {
+  bottom: 220px;
+  right: 16px;
+  width: 24px;
+  height: 24px;
+  --dur: 10s;
+}
+.deco-pos--profile-3 {
+  top: 280px;
+  left: 12px;
+  width: 28px;
+  height: 28px;
+  --r0: -6deg;
+  --r1: 10deg;
+  --dur: 8.6s;
+}
+.deco-pos--profile-4 {
+  top: 340px;
+  right: 24px;
+  width: 24px;
+  height: 24px;
+  --dur: 13s;
 }
