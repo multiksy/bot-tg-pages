@@ -783,24 +783,28 @@ img { max-width: 100%; display: block; }
 .is-pressed { transform: scale(0.96); }
 
 /* =========================================================
-   ДЕКОРАТИВНЫЕ ИКОНКИ «ИЗ ЖИДКОГО МЕТАЛЛА»
-   Те же WebP-ассеты, что и на сайте — вырезаны как отдельные
-   файлы в img/. В отличие от первой версии — теперь анимированы
-   (лёгкое покачивание/вращение, как .obj__f/.ico на сайте), но
-   мягче и медленнее — это компактные акценты в мобильном интерфейсе,
-   а не крупные декорации на просторном лендинге.
+   ДЕКОРАТИВНЫЕ ИКОНКИ «ИЗ ЖИДКОГО МЕТАЛЛА» — v4, перерисовано по замерам
+   Те же WebP-ассеты, что и на сайте — файлы в img/.
+
+   Все иконки — ОДНОГО размера (--deco-size) и позиционируются строго внутри
+   измеренных пустых зон экрана (см. tg-app/CLAUDE.md, там же таблица зон
+   с координатами) — ни одна не задевает карточки/кнопки/текст. Раскладка
+   внутри зоны — равномерная сетка (одинаковые шаги между иконками), а не
+   скопом в одном углу.
    Уважаем prefers-reduced-motion — отключаем анимацию, если у
    пользователя в системе включено «уменьшить движение».
    ========================================================= */
+:root {
+  --deco-size: 40px; /* единый размер ВСЕХ декоративных иконок — менять только тут */
+}
 .deco-icon {
   position: absolute;
-  width: 120px;
-  height: 120px;
+  width: var(--deco-size);
+  height: var(--deco-size);
   object-fit: contain; /* картинки не квадратные (напр. eye 640×520) — вписываем без искажений */
   pointer-events: none;
-  /* Раньше здесь был filter: drop-shadow(...) для свечения — убрано: в вебвью
-     Telegram Desktop он не читает прозрачность WebP правильно и рисует тень
-     сплошным квадратом по границам картинки вместо силуэта иконки. */
+  /* filter: drop-shadow(...) сюда не возвращать — в вебвью Telegram Desktop он не
+     читает прозрачность WebP и рисует тень сплошным квадратом вместо силуэта. */
   z-index: 1;
   animation: deco-float var(--dur, 6.5s) ease-in-out var(--delay, 0s) infinite alternate;
 }
@@ -841,314 +845,59 @@ img { max-width: 100%; display: block; }
    а не через CSS background — .deco-icon--heart и т.д. остаются просто именующими
    классами для читаемости разметки, стилей на них больше нет. */
 
-/* Позиции, размер и параметры анимации — по одной на каждое место
-   использования, подбирались на глаз под конкретный экран.
-   --r0/--r1 — крайние углы покачивания (для .deco-icon--spin не нужны),
-   --dur/--delay разные у соседних иконок, чтобы не двигались синхронно.
-   Править можно прямо здесь, ничего в HTML/JS трогать не нужно. */
-.deco-pos--home-title {
-  /* Единственные 4 иконки в файле НЕ утроены (в отличие от остальных) —
-     тут прямо на этом месте главный заголовок-оффер, крупная иконка
-     закрывала бы текст. Здесь взят компромисс ~1.5× вместо 3×. */
-  top: -10px;
-  right: -6px;
-  width: 50px;
-  height: 50px;
-  --dur: 13s;
-}
-.deco-pos--home-demo {
-  width: 96px;
-  height: 96px;
-  bottom: -10px;
-  left: -10px;
-  --r0: -18deg;
-  --r1: -2deg;
-  --dur: 7s;
-  --delay: 0.6s;
-  z-index: 2;
-}
-.deco-pos--upload {
-  top: -12px;
-  right: -14px;
-  width: 90px;
-  height: 90px;
-  --r0: -4deg;
-  --r1: 12deg;
-  --dur: 6s;
-}
-.deco-pos--result-1 {
-  top: 2px;
-  right: 6px;
-  width: 114px;
-  height: 114px;
-  --r0: 2deg;
-  --r1: 16deg;
-  --dur: 7.5s;
-}
-.deco-pos--result-2 {
-  top: 10px;
-  left: 6px;
-  width: 90px;
-  height: 90px;
-  --r0: -14deg;
-  --r1: 0deg;
-  --dur: 6.5s;
-  --delay: 0.4s;
-}
-.deco-pos--history {
-  top: 2px;
-  right: 10px;
-  width: 96px;
-  height: 96px;
-  --dur: 15s;
-}
-.deco-pos--pricing-1 {
-  top: 0px;
-  right: 2px;
-  width: 108px;
-  height: 108px;
-  --r0: -16deg;
-  --r1: -2deg;
-  --dur: 7s;
-}
-.deco-pos--pricing-2 {
-  bottom: 90px;
-  left: 8px;
-  width: 90px;
-  height: 90px;
-  --r0: 0deg;
-  --r1: 14deg;
-  --dur: 8s;
-  --delay: 0.8s;
-}
-.deco-pos--profile-1 {
-  top: 6px;
-  right: 6px;
-  width: 102px;
-  height: 102px;
-  --r0: 4deg;
-  --r1: 18deg;
-  --dur: 6.8s;
-}
-.deco-pos--profile-2 {
-  top: 60px;
-  right: 40px;
-  width: 78px;
-  height: 78px;
-  --dur: 14s;
-}
+/* =========================================================
+   ПОЗИЦИИ — координаты top/left посчитаны по реальным замерам bounding box
+   каждого функционального блока (Playwright, вьюпорт 390×844), не на глаз.
+   Все иконки — прямые дети .screen__content, поэтому координаты абсолютные
+   от начала экрана. --r0/--r1 — крайние углы покачивания, --dur/--delay —
+   у соседних разные, чтобы не двигались синхронно.
+   ========================================================= */
 
-/* Вторая волна иконок — сгущаем декор по просьбе (было мало). Те же правила
-   безопасного позиционирования: элементы внутри relative-обёрток (.home-header,
-   .demo-card, .icon-circle-wrap) могут уходить в минус, всё остальное — только
-   top/bottom ≥ 0 относительно .screen__content (иначе обрежет скролл). */
-.deco-pos--home-title-2 {
-  bottom: -6px;
-  left: 4px;
-  width: 34px;
-  height: 34px;
-  --r0: 6deg;
-  --r1: -6deg;
-  --dur: 8s;
-  --delay: 1.2s;
-}
-.deco-pos--home-demo-2 {
-  top: -10px;
-  right: -8px;
-  width: 90px;
-  height: 90px;
-  --r0: 10deg;
-  --r1: -4deg;
-  --dur: 7.8s;
-  --delay: 0.3s;
-  z-index: 2;
-}
-.deco-pos--upload-2 {
-  bottom: -8px;
-  right: -10px;
-  width: 78px;
-  height: 78px;
-  --dur: 12s;
-}
-.deco-pos--upload-3 {
-  top: 6px;
-  right: 8px;
-  width: 72px;
-  height: 72px;
-  --r0: -8deg;
-  --r1: 8deg;
-  --dur: 6.4s;
-}
-.deco-pos--processing {
-  top: 8px;
-  right: 10px;
-  width: 78px;
-  height: 78px;
-  --dur: 15s;
-}
-.deco-pos--result-3 {
-  bottom: 92px;
-  right: 10px;
-  width: 84px;
-  height: 84px;
-  --r0: -10deg;
-  --r1: 6deg;
-  --dur: 7.2s;
-  --delay: 0.5s;
-}
-.deco-pos--result-4 {
-  top: 4px;
-  left: 8px;
-  width: 90px;
-  height: 90px;
-  --r0: 6deg;
-  --r1: -8deg;
-  --dur: 8.4s;
-}
-.deco-pos--history-2 {
-  /* Не утроена, как home-title — тут заголовок «Мои клипы» слева, сдвинута
-     ниже строки заголовка, чтобы не наезжать на текст. */
-  top: 46px;
-  left: 8px;
-  width: 30px;
-  height: 30px;
-  --dur: 9s;
-}
-.deco-pos--history-3 {
-  bottom: 60px;
-  right: 20px;
-  width: 90px;
-  height: 90px;
-  --r0: -6deg;
-  --r1: 8deg;
-  --dur: 7.6s;
-  --delay: 0.8s;
-}
-.deco-pos--pricing-3 {
-  /* Не утроена, как home-title — здесь заголовок «Тарифы» и сразу под ним
-     первая карточка тарифа с текстом цены, крупная иконка перекрыла бы их.
-     Оставлена у самого верхнего края, где раньше не мешала. */
-  top: -2px;
-  left: 2px;
-  width: 30px;
-  height: 30px;
-  --r0: 8deg;
-  --r1: -6deg;
-  --dur: 8.2s;
-}
-.deco-pos--pricing-4 {
-  bottom: 220px;
-  right: 16px;
-  width: 72px;
-  height: 72px;
-  --dur: 10s;
-}
-.deco-pos--profile-3 {
-  top: 280px;
-  left: 12px;
-  width: 84px;
-  height: 84px;
-  --r0: -6deg;
-  --r1: 10deg;
-  --dur: 8.6s;
-}
-.deco-pos--profile-4 {
-  top: 340px;
-  right: 24px;
-  width: 72px;
-  height: 72px;
-  --dur: 13s;
-}
+/* ---------- Главная: слева/справа от демо-карточки (65px поля) + полоса
+   между бейджем лимита и кнопкой. Заголовок и сама карточка — без иконок. */
+.deco-pos--home-1 { top: 210px; left: 24px;  --r0: -10deg; --r1: 4deg;  --dur: 6.8s; }
+.deco-pos--home-2 { top: 420px; left: 24px;  --r0: 6deg;   --r1: -8deg; --dur: 8.2s; --delay: 0.6s; }
+.deco-pos--home-3 { top: 250px; left: 306px; --r0: 8deg;   --r1: -4deg; --dur: 7.4s; --delay: 0.3s; }
+.deco-pos--home-4 { top: 450px; left: 306px; --r0: -6deg;  --r1: 10deg; --dur: 9s; }
+.deco-pos--home-5 { top: 636px; left: 54px;  --dur: 12s; }
+.deco-pos--home-6 { top: 636px; left: 276px; --dur: 10.6s; --delay: 0.5s; }
 
-/* Третья волна — ещё гуще (было мало, добавили больше). */
-.deco-pos--home-demo-3 {
-  bottom: -8px;
-  right: -6px;
-  width: 66px;
-  height: 66px;
-  --r0: -10deg;
-  --r1: 6deg;
-  --dur: 6.6s;
-  --delay: 0.9s;
-  z-index: 2;
-}
-.deco-pos--upload-4 {
-  bottom: 4px;
-  left: 6px;
-  width: 66px;
-  height: 66px;
-  --r0: 8deg;
-  --r1: -6deg;
-  --dur: 9.4s;
-}
-.deco-pos--processing-2 {
-  bottom: 4px;
-  left: 10px;
-  width: 72px;
-  height: 72px;
-  --dur: 11s;
-}
-.deco-pos--result-5 {
-  bottom: 4px;
-  left: 10px;
-  width: 78px;
-  height: 78px;
-  --r0: -8deg;
-  --r1: 6deg;
-  --dur: 8.8s;
-}
-.deco-pos--result-6 {
-  top: 2px;
-  right: 60px;
-  width: 66px;
-  height: 66px;
-  --dur: 10.5s;
-}
-.deco-pos--history-4 {
-  top: 240px;
-  right: 24px;
-  width: 90px;
-  height: 90px;
-  --r0: 6deg;
-  --r1: -8deg;
-  --dur: 7.4s;
-}
-.deco-pos--history-5 {
-  top: 320px;
-  left: 30px;
-  width: 72px;
-  height: 72px;
-  --dur: 12.5s;
-}
-.deco-pos--pricing-5 {
-  top: 340px;
-  right: 30px;
-  width: 78px;
-  height: 78px;
-  --r0: -6deg;
-  --r1: 8deg;
-  --dur: 8s;
-}
-.deco-pos--pricing-6 {
-  top: 420px;
-  left: 20px;
-  width: 66px;
-  height: 66px;
-  --dur: 9.8s;
-}
-.deco-pos--profile-5 {
-  top: 400px;
-  right: 40px;
-  width: 72px;
-  height: 72px;
-  --r0: 8deg;
-  --r1: -6deg;
-  --dur: 7.9s;
-}
-.deco-pos--profile-6 {
-  top: 470px;
-  left: 24px;
-  width: 66px;
-  height: 66px;
-  --dur: 11.5s;
-}
+/* ---------- Загрузка: верхняя пустая полоса + нижняя, по диагоналям. */
+.deco-pos--upload-1 { top: 36px;  left: 30px;  --r0: -8deg; --r1: 6deg;  --dur: 7s; }
+.deco-pos--upload-2 { top: 70px;  left: 310px; --r0: 6deg;  --r1: -8deg; --dur: 8.6s; --delay: 0.4s; }
+.deco-pos--upload-3 { top: 560px; left: 60px;  --dur: 10.2s; }
+.deco-pos--upload-4 { top: 600px; left: 300px; --r0: -6deg; --r1: 8deg;  --dur: 9.4s; --delay: 0.7s; }
+
+/* ---------- Обработка: минимально, экран для фокуса на прогрессе. */
+.deco-pos--processing-1 { top: 50px;  left: 30px;  --dur: 11s; }
+.deco-pos--processing-2 { top: 600px; left: 300px; --dur: 13.5s; --delay: 0.5s; }
+
+/* ---------- Результат: единственная надёжно пустая полоса — между
+   плитками действий и кнопкой «Скачать/Переслать» (615–730px). */
+.deco-pos--result-1 { top: 650px; left: 40px;  --r0: -8deg; --r1: 6deg; --dur: 7.6s; }
+.deco-pos--result-2 { top: 665px; left: 175px; --dur: 9.2s; --delay: 0.4s; }
+.deco-pos--result-3 { top: 648px; left: 300px; --r0: 6deg; --r1: -6deg; --dur: 8.4s; --delay: 0.8s; }
+
+/* ---------- Мои клипы: заголовок и сетка клипов — без иконок,
+   вся раскладка в пустой зоне под сеткой (от ~400px и ниже). */
+.deco-pos--history-1 { top: 420px; left: 50px;  --r0: -6deg; --r1: 8deg; --dur: 7.2s; }
+.deco-pos--history-2 { top: 440px; left: 175px; --dur: 10s; --delay: 0.5s; }
+.deco-pos--history-3 { top: 410px; left: 300px; --r0: 8deg; --r1: -6deg; --dur: 8.6s; }
+.deco-pos--history-4 { top: 590px; left: 100px; --dur: 9.6s; --delay: 0.3s; }
+.deco-pos--history-5 { top: 610px; left: 260px; --r0: -8deg; --r1: 4deg; --dur: 11.4s; }
+
+/* ---------- Тарифы: заголовок и карточки — без иконок, раскладка
+   в пустой зоне между списком тарифов и кнопкой оплаты (~460–710px). */
+.deco-pos--pricing-1 { top: 470px; left: 50px;  --r0: -6deg; --r1: 8deg; --dur: 7.8s; }
+.deco-pos--pricing-2 { top: 490px; left: 175px; --dur: 10.4s; --delay: 0.4s; }
+.deco-pos--pricing-3 { top: 460px; left: 300px; --r0: 8deg; --r1: -6deg; --dur: 8.2s; }
+.deco-pos--pricing-4 { top: 630px; left: 100px; --dur: 9.4s; --delay: 0.6s; }
+.deco-pos--pricing-5 { top: 650px; left: 260px; --r0: -8deg; --r1: 4deg; --dur: 11s; }
+
+/* ---------- Профиль: шапка и плитки — без иконок, раскладка
+   в пустой зоне под плитками (~390–720px). */
+.deco-pos--profile-1 { top: 410px; left: 50px;  --r0: -6deg; --r1: 8deg; --dur: 7.4s; }
+.deco-pos--profile-2 { top: 430px; left: 175px; --dur: 9.8s; --delay: 0.5s; }
+.deco-pos--profile-3 { top: 400px; left: 300px; --r0: 8deg; --r1: -6deg; --dur: 8.8s; }
+.deco-pos--profile-4 { top: 600px; left: 110px; --dur: 10.8s; --delay: 0.3s; }
+.deco-pos--profile-5 { top: 620px; left: 270px; --r0: -8deg; --r1: 4deg; --dur: 12.2s; }

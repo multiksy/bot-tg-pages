@@ -19,7 +19,7 @@
 
   <!-- ?v=N — кэш-бастер: Telegram агрессивно кэширует статику Mini App и не подхватывает
        новые CSS/JS сами по себе. Бампать N на 1 при каждом деплое изменений в tg-app/. -->
-  <link rel="stylesheet" href="css/style.css?v=2" />
+  <link rel="stylesheet" href="css/style.css?v=3" />
 </head>
 <body>
   <div id="app">
@@ -41,10 +41,17 @@
       <!-- ---------- [1] ГЛАВНАЯ ---------- -->
       <section id="screen-home" class="screen" data-screen="home">
         <div class="screen__content">
+          <!-- Декоративные «жидкий металл» иконки — одного размера (--deco-size),
+               позиции подобраны по замерам так, чтобы не задевать заголовок/карточку/кнопку
+               (см. tg-app/CLAUDE.md). -->
+          <img class="deco-icon deco-pos--home-1" src="img/drop.webp" alt="" aria-hidden="true">
+          <img class="deco-icon deco-pos--home-2" src="img/hourglass.webp" alt="" aria-hidden="true">
+          <img class="deco-icon deco-pos--home-3" src="img/saturn.webp" alt="" aria-hidden="true">
+          <img class="deco-icon deco-pos--home-4" src="img/moon.webp" alt="" aria-hidden="true">
+          <img class="deco-icon deco-icon--spin deco-pos--home-5" src="img/sparkle.webp" alt="" aria-hidden="true">
+          <img class="deco-icon deco-pos--home-6" src="img/ball.webp" alt="" aria-hidden="true">
+
           <header class="home-header">
-            <!-- Декоративные «жидкий металл» иконки с сайта — статичные, без анимации (по запросу) -->
-            <img class="deco-icon deco-icon--sparkle deco-icon--spin deco-pos--home-title" src="img/sparkle.webp" alt="" aria-hidden="true">
-            <img class="deco-icon deco-pos--home-title-2" src="img/hourglass.webp" alt="" aria-hidden="true">
             <h1 class="home-title">Видео → готовый Reels за 60&nbsp;сек</h1>
             <p class="home-subtitle">Пришли видео — получи клип с субтитрами. Первый — бесплатно.</p>
           </header>
@@ -52,9 +59,6 @@
           <!-- Демо-превью «до/после». Реального видео в проекте нет — это CSS/SVG-анимация-заглушка,
                см. tg-app/CLAUDE.md, где заменить на настоящий клип. -->
           <div class="demo-card" id="home-demo">
-            <img class="deco-icon deco-icon--drop deco-pos--home-demo" src="img/drop.webp" alt="" aria-hidden="true">
-            <img class="deco-icon deco-pos--home-demo-3" src="img/ball.webp" alt="" aria-hidden="true">
-            <img class="deco-icon deco-pos--home-demo-2" src="img/saturn.webp" alt="" aria-hidden="true">
             <div class="demo-card__phone">
               <div class="demo-loop" aria-hidden="true">
                 <div class="demo-loop__bars">
@@ -79,15 +83,15 @@
       <!-- ---------- [2] ЗАГРУЗКА ВИДЕО ---------- -->
       <section id="screen-upload" class="screen" data-screen="upload">
         <div class="screen__content screen__content--center">
+          <img class="deco-icon deco-pos--upload-1" src="img/flower.webp" alt="" aria-hidden="true">
+          <img class="deco-icon deco-pos--upload-2" src="img/sparkles.webp" alt="" aria-hidden="true">
+          <img class="deco-icon deco-pos--upload-3" src="img/eye.webp" alt="" aria-hidden="true">
+          <img class="deco-icon deco-pos--upload-4" src="img/curl.webp" alt="" aria-hidden="true">
           <div class="icon-circle-wrap">
-            <img class="deco-icon deco-icon--flower deco-pos--upload" src="img/flower.webp" alt="" aria-hidden="true">
-            <img class="deco-icon deco-pos--upload-2" src="img/sparkles.webp" alt="" aria-hidden="true">
             <div class="icon-circle" aria-hidden="true">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="14" height="16" rx="4" fill="var(--accent)"/><path d="M16 9.5L21.2 6.6C21.8 6.3 22.5 6.7 22.5 7.4V16.6C22.5 17.3 21.8 17.7 21.2 17.4L16 14.5" stroke="var(--accent)" stroke-width="1.6" stroke-linejoin="round"/></svg>
             </div>
           </div>
-          <img class="deco-icon deco-pos--upload-3" src="img/eye.webp" alt="" aria-hidden="true">
-          <img class="deco-icon deco-pos--upload-4" src="img/curl.webp" alt="" aria-hidden="true">
           <h2 class="screen-title">Пришли видео в чат — начну обработку сразу</h2>
           <p class="screen-hint">MP4 или MOV, от 30 секунд. Дальше всё происходит в чате с ботом.</p>
         </div>
@@ -98,7 +102,7 @@
       <!-- ---------- [3] СТАТУС ОБРАБОТКИ ---------- -->
       <section id="screen-processing" class="screen" data-screen="processing">
         <div class="screen__content screen__content--center">
-          <img class="deco-icon deco-pos--processing" src="img/loop.webp" alt="" aria-hidden="true">
+          <img class="deco-icon deco-pos--processing-1" src="img/loop.webp" alt="" aria-hidden="true">
           <img class="deco-icon deco-pos--processing-2" src="img/star-outline.webp" alt="" aria-hidden="true">
           <div class="progress-ring" id="processing-ring">
             <svg width="120" height="120" viewBox="0 0 120 120" aria-hidden="true">
@@ -115,12 +119,6 @@
       <!-- ---------- [4] РЕЗУЛЬТАТ ---------- -->
       <section id="screen-result" class="screen" data-screen="result">
         <div class="screen__content">
-          <img class="deco-icon deco-icon--moon deco-pos--result-1" src="img/moon.webp" alt="" aria-hidden="true">
-          <img class="deco-icon deco-icon--blob deco-pos--result-2" src="img/blob.webp" alt="" aria-hidden="true">
-          <img class="deco-icon deco-pos--result-3" src="img/saturn.webp" alt="" aria-hidden="true">
-          <img class="deco-icon deco-pos--result-4" src="img/eye.webp" alt="" aria-hidden="true">
-          <img class="deco-icon deco-pos--result-5" src="img/pawn.webp" alt="" aria-hidden="true">
-          <img class="deco-icon deco-pos--result-6" src="img/xblob.webp" alt="" aria-hidden="true">
           <div class="result-card" id="result-card">
             <div class="demo-loop demo-loop--result" aria-hidden="true">
               <div class="demo-loop__bars">
@@ -146,6 +144,10 @@
               <span class="tile__icon">🎵</span><span>Музыка</span>
             </button>
           </div>
+
+          <img class="deco-icon deco-pos--result-1" src="img/pawn.webp" alt="" aria-hidden="true">
+          <img class="deco-icon deco-pos--result-2" src="img/xblob.webp" alt="" aria-hidden="true">
+          <img class="deco-icon deco-pos--result-3" src="img/cherry.webp" alt="" aria-hidden="true">
         </div>
 
         <button class="main-button" id="result-share">Скачать / Переслать</button>
@@ -154,11 +156,6 @@
       <!-- ---------- [5] МОИ КЛИПЫ ---------- -->
       <section id="screen-history" class="screen" data-screen="history">
         <div class="screen__content">
-          <img class="deco-icon deco-icon--cherry deco-pos--history" src="img/cherry.webp" alt="" aria-hidden="true">
-          <img class="deco-icon deco-pos--history-2" src="img/loop.webp" alt="" aria-hidden="true">
-          <img class="deco-icon deco-pos--history-3" src="img/hourglass.webp" alt="" aria-hidden="true">
-          <img class="deco-icon deco-pos--history-4" src="img/spring.webp" alt="" aria-hidden="true">
-          <img class="deco-icon deco-pos--history-5" src="img/ball.webp" alt="" aria-hidden="true">
           <h2 class="screen-title screen-title--list">Мои клипы</h2>
           <div class="history-grid" id="history-grid"></div>
 
@@ -166,20 +163,26 @@
             <div class="icon-circle" aria-hidden="true">📼</div>
             <p class="screen-hint">Здесь появятся твои клипы</p>
           </div>
+
+          <img class="deco-icon deco-pos--history-1" src="img/rings.webp" alt="" aria-hidden="true">
+          <img class="deco-icon deco-pos--history-2" src="img/spring.webp" alt="" aria-hidden="true">
+          <img class="deco-icon deco-pos--history-3" src="img/blob.webp" alt="" aria-hidden="true">
+          <img class="deco-icon deco-pos--history-4" src="img/heart.webp" alt="" aria-hidden="true">
+          <img class="deco-icon deco-icon--spin deco-pos--history-5" src="img/star.webp" alt="" aria-hidden="true">
         </div>
       </section>
 
       <!-- ---------- [6] ТАРИФЫ ---------- -->
       <section id="screen-pricing" class="screen" data-screen="pricing">
         <div class="screen__content">
-          <img class="deco-icon deco-icon--rings deco-pos--pricing-1" src="img/rings.webp" alt="" aria-hidden="true">
-          <img class="deco-icon deco-icon--star deco-icon--spin deco-pos--pricing-2" src="img/star.webp" alt="" aria-hidden="true">
-          <img class="deco-icon deco-pos--pricing-3" src="img/eye.webp" alt="" aria-hidden="true">
-          <img class="deco-icon deco-pos--pricing-4" src="img/sparkles.webp" alt="" aria-hidden="true">
-          <img class="deco-icon deco-pos--pricing-5" src="img/pawn.webp" alt="" aria-hidden="true">
-          <img class="deco-icon deco-pos--pricing-6" src="img/curl.webp" alt="" aria-hidden="true">
           <h2 class="screen-title screen-title--list">Тарифы</h2>
           <div class="pricing-list" id="pricing-list"></div>
+
+          <img class="deco-icon deco-pos--pricing-1" src="img/eye.webp" alt="" aria-hidden="true">
+          <img class="deco-icon deco-pos--pricing-2" src="img/sparkles.webp" alt="" aria-hidden="true">
+          <img class="deco-icon deco-pos--pricing-3" src="img/saturn.webp" alt="" aria-hidden="true">
+          <img class="deco-icon deco-pos--pricing-4" src="img/hourglass.webp" alt="" aria-hidden="true">
+          <img class="deco-icon deco-pos--pricing-5" src="img/drop.webp" alt="" aria-hidden="true">
         </div>
 
         <button class="main-button" id="pricing-pay" disabled>Выбери тариф</button>
@@ -188,12 +191,6 @@
       <!-- ---------- [7] ПРОФИЛЬ ---------- -->
       <section id="screen-profile" class="screen" data-screen="profile">
         <div class="screen__content">
-          <img class="deco-icon deco-icon--heart deco-pos--profile-1" src="img/heart.webp" alt="" aria-hidden="true">
-          <img class="deco-icon deco-icon--sparkle deco-icon--spin deco-pos--profile-2" src="img/sparkle.webp" alt="" aria-hidden="true">
-          <img class="deco-icon deco-pos--profile-3" src="img/saturn.webp" alt="" aria-hidden="true">
-          <img class="deco-icon deco-pos--profile-4" src="img/loop.webp" alt="" aria-hidden="true">
-          <img class="deco-icon deco-pos--profile-5" src="img/xblob.webp" alt="" aria-hidden="true">
-          <img class="deco-icon deco-pos--profile-6" src="img/star-outline.webp" alt="" aria-hidden="true">
           <div class="profile-head">
             <img class="profile-avatar" id="profile-avatar" src="" alt="" />
             <div>
@@ -215,6 +212,12 @@
               <span class="tile__icon">💬</span><span>Поддержка</span>
             </button>
           </div>
+
+          <img class="deco-icon deco-pos--profile-1" src="img/moon.webp" alt="" aria-hidden="true">
+          <img class="deco-icon deco-pos--profile-2" src="img/ball.webp" alt="" aria-hidden="true">
+          <img class="deco-icon deco-pos--profile-3" src="img/loop.webp" alt="" aria-hidden="true">
+          <img class="deco-icon deco-pos--profile-4" src="img/cherry.webp" alt="" aria-hidden="true">
+          <img class="deco-icon deco-pos--profile-5" src="img/star-outline.webp" alt="" aria-hidden="true">
         </div>
       </section>
 
@@ -252,8 +255,8 @@
   </div>
 
   <!-- Порядок важен: данные и иконки → обёртка Telegram SDK → основная логика приложения -->
-  <script src="js/data.js?v=2"></script>
-  <script src="js/telegram.js?v=2"></script>
-  <script src="js/app.js?v=2"></script>
+  <script src="js/data.js?v=3"></script>
+  <script src="js/telegram.js?v=3"></script>
+  <script src="js/app.js?v=3"></script>
 </body>
 </html>
