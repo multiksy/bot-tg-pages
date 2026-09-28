@@ -19,7 +19,7 @@
 
   <!-- ?v=N — кэш-бастер: Telegram агрессивно кэширует статику Mini App и не подхватывает
        новые CSS/JS сами по себе. Бампать N на 1 при каждом деплое изменений в tg-app/. -->
-  <link rel="stylesheet" href="css/style.css?v=3" />
+  <link rel="stylesheet" href="css/style.css?v=4" />
 </head>
 <body>
   <div id="app">
@@ -83,7 +83,7 @@
       <!-- ---------- [2] ЗАГРУЗКА ВИДЕО ---------- -->
       <section id="screen-upload" class="screen" data-screen="upload">
         <div class="screen__content screen__content--center">
-          <img class="deco-icon deco-pos--upload-1" src="img/flower.webp" alt="" aria-hidden="true">
+          <img class="deco-icon deco-pos--upload-1" src="img/flower.webp?v=4" alt="" aria-hidden="true">
           <img class="deco-icon deco-pos--upload-2" src="img/sparkles.webp" alt="" aria-hidden="true">
           <img class="deco-icon deco-pos--upload-3" src="img/eye.webp" alt="" aria-hidden="true">
           <img class="deco-icon deco-pos--upload-4" src="img/curl.webp" alt="" aria-hidden="true">
@@ -146,8 +146,8 @@
           </div>
 
           <img class="deco-icon deco-pos--result-1" src="img/pawn.webp" alt="" aria-hidden="true">
-          <img class="deco-icon deco-pos--result-2" src="img/xblob.webp" alt="" aria-hidden="true">
-          <img class="deco-icon deco-pos--result-3" src="img/cherry.webp" alt="" aria-hidden="true">
+          <img class="deco-icon deco-pos--result-2" src="img/xblob.webp?v=4" alt="" aria-hidden="true">
+          <img class="deco-icon deco-pos--result-3" src="img/cherry.webp?v=4" alt="" aria-hidden="true">
         </div>
 
         <button class="main-button" id="result-share">Скачать / Переслать</button>
@@ -168,7 +168,7 @@
           <img class="deco-icon deco-pos--history-2" src="img/spring.webp" alt="" aria-hidden="true">
           <img class="deco-icon deco-pos--history-3" src="img/blob.webp" alt="" aria-hidden="true">
           <img class="deco-icon deco-pos--history-4" src="img/heart.webp" alt="" aria-hidden="true">
-          <img class="deco-icon deco-icon--spin deco-pos--history-5" src="img/star.webp" alt="" aria-hidden="true">
+          <img class="deco-icon deco-icon--spin deco-pos--history-5" src="img/star.webp?v=4" alt="" aria-hidden="true">
         </div>
       </section>
 
@@ -216,7 +216,7 @@
           <img class="deco-icon deco-pos--profile-1" src="img/moon.webp" alt="" aria-hidden="true">
           <img class="deco-icon deco-pos--profile-2" src="img/ball.webp" alt="" aria-hidden="true">
           <img class="deco-icon deco-pos--profile-3" src="img/loop.webp" alt="" aria-hidden="true">
-          <img class="deco-icon deco-pos--profile-4" src="img/cherry.webp" alt="" aria-hidden="true">
+          <img class="deco-icon deco-pos--profile-4" src="img/cherry.webp?v=4" alt="" aria-hidden="true">
           <img class="deco-icon deco-pos--profile-5" src="img/star-outline.webp" alt="" aria-hidden="true">
         </div>
       </section>
@@ -255,8 +255,8 @@
   </div>
 
   <!-- Порядок важен: данные и иконки → обёртка Telegram SDK → основная логика приложения -->
-  <script src="js/data.js?v=3"></script>
-  <script src="js/telegram.js?v=3"></script>
-  <script src="js/app.js?v=3"></script>
+  <script src="js/data.js?v=4"></script>
+  <script src="js/telegram.js?v=4"></script>
+  <script src="js/app.js?v=4"></script>
 </body>
 </html>
