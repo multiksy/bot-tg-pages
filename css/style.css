@@ -794,8 +794,8 @@ img { max-width: 100%; display: block; }
    ========================================================= */
 .deco-icon {
   position: absolute;
-  width: 40px;
-  height: 40px;
+  width: 120px;
+  height: 120px;
   object-fit: contain; /* картинки не квадратные (напр. eye 640×520) — вписываем без искажений */
   pointer-events: none;
   /* Раньше здесь был filter: drop-shadow(...) для свечения — убрано: в вебвью
@@ -847,15 +847,18 @@ img { max-width: 100%; display: block; }
    --dur/--delay разные у соседних иконок, чтобы не двигались синхронно.
    Править можно прямо здесь, ничего в HTML/JS трогать не нужно. */
 .deco-pos--home-title {
-  top: -8px;
-  right: 0px;
-  width: 34px;
-  height: 34px;
+  /* Единственные 4 иконки в файле НЕ утроены (в отличие от остальных) —
+     тут прямо на этом месте главный заголовок-оффер, крупная иконка
+     закрывала бы текст. Здесь взят компромисс ~1.5× вместо 3×. */
+  top: -10px;
+  right: -6px;
+  width: 50px;
+  height: 50px;
   --dur: 13s;
 }
 .deco-pos--home-demo {
-  width: 32px;
-  height: 32px;
+  width: 96px;
+  height: 96px;
   bottom: -10px;
   left: -10px;
   --r0: -18deg;
@@ -867,8 +870,8 @@ img { max-width: 100%; display: block; }
 .deco-pos--upload {
   top: -12px;
   right: -14px;
-  width: 30px;
-  height: 30px;
+  width: 90px;
+  height: 90px;
   --r0: -4deg;
   --r1: 12deg;
   --dur: 6s;
@@ -876,8 +879,8 @@ img { max-width: 100%; display: block; }
 .deco-pos--result-1 {
   top: 2px;
   right: 6px;
-  width: 38px;
-  height: 38px;
+  width: 114px;
+  height: 114px;
   --r0: 2deg;
   --r1: 16deg;
   --dur: 7.5s;
@@ -885,8 +888,8 @@ img { max-width: 100%; display: block; }
 .deco-pos--result-2 {
   top: 10px;
   left: 6px;
-  width: 30px;
-  height: 30px;
+  width: 90px;
+  height: 90px;
   --r0: -14deg;
   --r1: 0deg;
   --dur: 6.5s;
@@ -895,15 +898,15 @@ img { max-width: 100%; display: block; }
 .deco-pos--history {
   top: 2px;
   right: 10px;
-  width: 32px;
-  height: 32px;
+  width: 96px;
+  height: 96px;
   --dur: 15s;
 }
 .deco-pos--pricing-1 {
   top: 0px;
   right: 2px;
-  width: 36px;
-  height: 36px;
+  width: 108px;
+  height: 108px;
   --r0: -16deg;
   --r1: -2deg;
   --dur: 7s;
@@ -911,8 +914,8 @@ img { max-width: 100%; display: block; }
 .deco-pos--pricing-2 {
   bottom: 90px;
   left: 8px;
-  width: 30px;
-  height: 30px;
+  width: 90px;
+  height: 90px;
   --r0: 0deg;
   --r1: 14deg;
   --dur: 8s;
@@ -921,8 +924,8 @@ img { max-width: 100%; display: block; }
 .deco-pos--profile-1 {
   top: 6px;
   right: 6px;
-  width: 34px;
-  height: 34px;
+  width: 102px;
+  height: 102px;
   --r0: 4deg;
   --r1: 18deg;
   --dur: 6.8s;
@@ -930,8 +933,8 @@ img { max-width: 100%; display: block; }
 .deco-pos--profile-2 {
   top: 60px;
   right: 40px;
-  width: 26px;
-  height: 26px;
+  width: 78px;
+  height: 78px;
   --dur: 14s;
 }
 
@@ -942,8 +945,8 @@ img { max-width: 100%; display: block; }
 .deco-pos--home-title-2 {
   bottom: -6px;
   left: 4px;
-  width: 24px;
-  height: 24px;
+  width: 34px;
+  height: 34px;
   --r0: 6deg;
   --r1: -6deg;
   --dur: 8s;
@@ -952,8 +955,8 @@ img { max-width: 100%; display: block; }
 .deco-pos--home-demo-2 {
   top: -10px;
   right: -8px;
-  width: 30px;
-  height: 30px;
+  width: 90px;
+  height: 90px;
   --r0: 10deg;
   --r1: -4deg;
   --dur: 7.8s;
@@ -963,15 +966,15 @@ img { max-width: 100%; display: block; }
 .deco-pos--upload-2 {
   bottom: -8px;
   right: -10px;
-  width: 26px;
-  height: 26px;
+  width: 78px;
+  height: 78px;
   --dur: 12s;
 }
 .deco-pos--upload-3 {
   top: 6px;
   right: 8px;
-  width: 24px;
-  height: 24px;
+  width: 72px;
+  height: 72px;
   --r0: -8deg;
   --r1: 8deg;
   --dur: 6.4s;
@@ -979,15 +982,15 @@ img { max-width: 100%; display: block; }
 .deco-pos--processing {
   top: 8px;
   right: 10px;
-  width: 26px;
-  height: 26px;
+  width: 78px;
+  height: 78px;
   --dur: 15s;
 }
 .deco-pos--result-3 {
   bottom: 92px;
   right: 10px;
-  width: 28px;
-  height: 28px;
+  width: 84px;
+  height: 84px;
   --r0: -10deg;
   --r1: 6deg;
   --dur: 7.2s;
@@ -996,34 +999,39 @@ img { max-width: 100%; display: block; }
 .deco-pos--result-4 {
   top: 4px;
   left: 8px;
-  width: 30px;
-  height: 30px;
+  width: 90px;
+  height: 90px;
   --r0: 6deg;
   --r1: -8deg;
   --dur: 8.4s;
 }
 .deco-pos--history-2 {
-  top: 4px;
+  /* Не утроена, как home-title — тут заголовок «Мои клипы» слева, сдвинута
+     ниже строки заголовка, чтобы не наезжать на текст. */
+  top: 46px;
   left: 8px;
-  width: 26px;
-  height: 26px;
+  width: 30px;
+  height: 30px;
   --dur: 9s;
 }
 .deco-pos--history-3 {
   bottom: 60px;
   right: 20px;
-  width: 30px;
-  height: 30px;
+  width: 90px;
+  height: 90px;
   --r0: -6deg;
   --r1: 8deg;
   --dur: 7.6s;
   --delay: 0.8s;
 }
 .deco-pos--pricing-3 {
-  top: 2px;
-  left: 4px;
-  width: 28px;
-  height: 28px;
+  /* Не утроена, как home-title — здесь заголовок «Тарифы» и сразу под ним
+     первая карточка тарифа с текстом цены, крупная иконка перекрыла бы их.
+     Оставлена у самого верхнего края, где раньше не мешала. */
+  top: -2px;
+  left: 2px;
+  width: 30px;
+  height: 30px;
   --r0: 8deg;
   --r1: -6deg;
   --dur: 8.2s;
@@ -1031,15 +1039,15 @@ img { max-width: 100%; display: block; }
 .deco-pos--pricing-4 {
   bottom: 220px;
   right: 16px;
-  width: 24px;
-  height: 24px;
+  width: 72px;
+  height: 72px;
   --dur: 10s;
 }
 .deco-pos--profile-3 {
   top: 280px;
   left: 12px;
-  width: 28px;
-  height: 28px;
+  width: 84px;
+  height: 84px;
   --r0: -6deg;
   --r1: 10deg;
   --dur: 8.6s;
@@ -1047,7 +1055,100 @@ img { max-width: 100%; display: block; }
 .deco-pos--profile-4 {
   top: 340px;
   right: 24px;
-  width: 24px;
-  height: 24px;
+  width: 72px;
+  height: 72px;
   --dur: 13s;
+}
+
+/* Третья волна — ещё гуще (было мало, добавили больше). */
+.deco-pos--home-demo-3 {
+  bottom: -8px;
+  right: -6px;
+  width: 66px;
+  height: 66px;
+  --r0: -10deg;
+  --r1: 6deg;
+  --dur: 6.6s;
+  --delay: 0.9s;
+  z-index: 2;
+}
+.deco-pos--upload-4 {
+  bottom: 4px;
+  left: 6px;
+  width: 66px;
+  height: 66px;
+  --r0: 8deg;
+  --r1: -6deg;
+  --dur: 9.4s;
+}
+.deco-pos--processing-2 {
+  bottom: 4px;
+  left: 10px;
+  width: 72px;
+  height: 72px;
+  --dur: 11s;
+}
+.deco-pos--result-5 {
+  bottom: 4px;
+  left: 10px;
+  width: 78px;
+  height: 78px;
+  --r0: -8deg;
+  --r1: 6deg;
+  --dur: 8.8s;
+}
+.deco-pos--result-6 {
+  top: 2px;
+  right: 60px;
+  width: 66px;
+  height: 66px;
+  --dur: 10.5s;
+}
+.deco-pos--history-4 {
+  top: 240px;
+  right: 24px;
+  width: 90px;
+  height: 90px;
+  --r0: 6deg;
+  --r1: -8deg;
+  --dur: 7.4s;
+}
+.deco-pos--history-5 {
+  top: 320px;
+  left: 30px;
+  width: 72px;
+  height: 72px;
+  --dur: 12.5s;
+}
+.deco-pos--pricing-5 {
+  top: 340px;
+  right: 30px;
+  width: 78px;
+  height: 78px;
+  --r0: -6deg;
+  --r1: 8deg;
+  --dur: 8s;
+}
+.deco-pos--pricing-6 {
+  top: 420px;
+  left: 20px;
+  width: 66px;
+  height: 66px;
+  --dur: 9.8s;
+}
+.deco-pos--profile-5 {
+  top: 400px;
+  right: 40px;
+  width: 72px;
+  height: 72px;
+  --r0: 8deg;
+  --r1: -6deg;
+  --dur: 7.9s;
+}
+.deco-pos--profile-6 {
+  top: 470px;
+  left: 24px;
+  width: 66px;
+  height: 66px;
+  --dur: 11.5s;
 }
